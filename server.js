@@ -22,14 +22,13 @@ app.get('/:file', function(req, res) {
     var file = ('./JSONdata/' + req.params.file + '.JSON');
     var stream = fs.createReadStream(file);
     stream.on('error', function(err) {
-	console.log('API GET error: %s doesnt exist', file);
+        console.log('API GET error: $s does not exist', file);
         res.send(err);
-	//res.end();
     });
 
     stream.on('readable', function() {
-    	res.writeHead(200, {'Content-Type': 'application/json'});
-	console.log('GET request for %s', file);
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        console.log('GET request for %s', file);
         stream.pipe(res);
     });
 });
