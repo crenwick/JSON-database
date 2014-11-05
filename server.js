@@ -8,31 +8,32 @@ var port = process.env.PORT || 3000;
 var fs = require('fs');
 var jsonParser = bodyParser.json();
 
-
-app.post('/:file', jsonParser, function (req, res) {
+app.post('/:file', jsonParser, function(req, res) {
     //var data = JSON.stringify(req.body);
     var filename = ('./JSONdata/' + req.params.file + '.json');
     var s = fs.createWriteStream(filename);
     s.write(JSON.stringify(req.body));
-    console.log(req.body);
+    console.log('%j saved to %s', req.body, filename);
     s.end();
     res.end();
-    //console.log('piped ' + data + ' to ' + filename);
 });
 
-app.get('/:file', function (req, res) {
-    res.writeHead(200, {"Content-Type": "application/json"});
+app.get('/:file', function(req, res) {
     var file = ('./JSONdata/' + req.params.file + '.json');
     var stream = fs.createReadStream(file);
-    stream.on('error', function(err){
-        //res.writeHead(200, {"Content-Type": "utf8"});
+    stream.on('error', function(err) {
+	console.log('API GET error: %s doesnt exist', file);
         res.send(err);
+	//res.end();
     });
-    stream.on('readable', function(){
+
+    stream.on('readable', function() {
+    	res.writeHead(200, {'Content-Type': 'application/json'});
+	console.log('GET request for %s', file);
         stream.pipe(res);
     });
 });
 
-app.listen(port, function () {
+app.listen(port, function() {
     console.log('server running at ' + port);
 });
