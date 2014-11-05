@@ -10,7 +10,7 @@ var jsonParser = bodyParser.json();
 
 app.post('/:file', jsonParser, function(req, res) {
     //var data = JSON.stringify(req.body);
-    var filename = ('./JSONdata/' + req.params.file + '.json');
+    var filename = ('./JSONdata/' + req.params.file + '.JSON');
     var s = fs.createWriteStream(filename);
     s.write(JSON.stringify(req.body));
     console.log('%j saved to %s', req.body, filename);
@@ -19,7 +19,7 @@ app.post('/:file', jsonParser, function(req, res) {
 });
 
 app.get('/:file', function(req, res) {
-    var file = ('./JSONdata/' + req.params.file + '.json');
+    var file = ('./JSONdata/' + req.params.file + '.JSON');
     var stream = fs.createReadStream(file);
     stream.on('error', function(err) {
 	console.log('API GET error: %s doesnt exist', file);
